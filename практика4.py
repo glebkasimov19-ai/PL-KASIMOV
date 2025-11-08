@@ -42,6 +42,7 @@ for i in range(1, n + 1):
     s = s + i ** 3
 print(s)
 
+<<<<<<< HEAD
 #7.
 n = int(input("n = "))
 
@@ -53,3 +54,18 @@ for i in range(1, n + 1):
     sum = sum + faсtorial   # добавляем к общей сумме
 
 print("Ответ:", sum)
+=======
+
+
+#7.
+n = int(input("n = "))
+
+sum = 0       
+faсtorial = 1  
+
+for i in range(1, n + 1):
+    faсtorial = faсtorial * i  
+    sum = sum + faсtorial   
+
+print("Ответ:", sum)
+>>>>>>> 7746009c935b48178ec4598c8139bbe224668879
