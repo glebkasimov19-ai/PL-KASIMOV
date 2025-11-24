@@ -1,36 +1,33 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 
-# ------------------------------
-# Создаём главное окно
-# ------------------------------
+
 root = tk.Tk()
-root.title("Иванов Иван Иванович")   # ← Замените на своё ФИО
+root.title("Касимов Глеб Евгеньевич")   
 root.geometry("500x350")
 
-# Создаём вкладки
+#создание вкладки
 notebook = ttk.Notebook(root)
 notebook.pack(expand=True, fill='both')
 
-# ============================================================
-# 1 ВКЛАДКА — КАЛЬКУЛЯТОР
-# ============================================================
+
+#вкладка1(калькулятор)
 tab1 = ttk.Frame(notebook)
 notebook.add(tab1, text="Калькулятор")
 
-# Поля для чисел
+#поля для чисел
 num1_entry = ttk.Entry(tab1)
 num2_entry = ttk.Entry(tab1)
 
 num1_entry.pack(pady=10)
 num2_entry.pack(pady=10)
 
-# Выпадающий список операций
+#операции
 operation = ttk.Combobox(tab1, values=["+", "-", "*", "/"], state="readonly")
 operation.current(0)
 operation.pack(pady=10)
 
-# Функция вычисления
+#вычисления
 def calculate():
     try:
         a = float(num1_entry.get())
@@ -53,13 +50,13 @@ def calculate():
     except ValueError:
         messagebox.showerror("Ошибка", "Введите корректные числа!")
 
-# Кнопка "Вычислить"
+#кнопка "Вычислить"
 btn_calc = ttk.Button(tab1, text="Вычислить", command=calculate)
 btn_calc.pack(pady=10)
 
-# ============================================================
-# 2 ВКЛАДКА — CHECKBOX + ОКНО
-# ============================================================
+
+
+#вкладка2(чекбоксы)
 tab2 = ttk.Frame(notebook)
 notebook.add(tab2, text="Выбор")
 
@@ -88,16 +85,16 @@ def show_choice():
 btn_choice = ttk.Button(tab2, text="Показать выбор", command=show_choice)
 btn_choice.pack(pady=10)
 
-# ============================================================
-# 3 ВКЛАДКА — РАБОТА С ТЕКСТОМ + МЕНЮ
-# ============================================================
+
+
+#вкладка3(работа с текстом)
 tab3 = ttk.Frame(notebook)
 notebook.add(tab3, text="Текст")
 
 text_box = tk.Text(tab3, wrap="word")
 text_box.pack(expand=True, fill="both", padx=10, pady=10)
 
-# Функция загрузки файла
+#загрузки файла
 def load_file():
     file_path = filedialog.askopenfilename(
         filetypes=[("Текстовые файлы", "*.txt"), ("Все файлы", "*.*")]
@@ -108,17 +105,14 @@ def load_file():
             text_box.delete("1.0", tk.END)
             text_box.insert(tk.END, content)
 
-# Меню
+
 menu_bar = tk.Menu(root)
 root.config(menu=menu_bar)
 
 file_menu = tk.Menu(menu_bar, tearoff=0)
 menu_bar.add_cascade(label="Файл", menu=file_menu)
-file_menu.add_command(label="Загрузить текст", command=load_file)
+file_menu.add_command(label="Открыть текстовый файл", command=load_file)
 file_menu.add_separator()
 file_menu.add_command(label="Выход", command=root.quit)
 
-# ------------------------------
-# Запуск приложения
-# ------------------------------
 root.mainloop()
