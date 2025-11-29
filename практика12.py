@@ -1,26 +1,42 @@
-import requests
-from bs4 import BeautifulSoup
+import tkinter as tk
 import json
+import urllib.request
+import re
 
-url = "https://habr.com/ru/post/453440/"
+def get_owner_info():
+    repo_url = "https://github.com/elastic/elasticsearch"
+    repo_url = repo_url.strip()
+    owner = re.search(r"github\.com/([^/]+)", repo_url).group(1)
+    
+    with urllib.request.urlopen(f"https://api.github.com/users/{owner}") as r:
+        data = json.load(r)
+    
+    result = {
+        'company': data.get('company'),
+        'created_at': data.get('created_at'),
+        'email': data.get('email'),
+        'id': data.get('id'),
+        'name': data.get('name') or owner,
+        'url': data.get('url')
+    }
 
-response = requests.get(url)
-response.encoding = 'utf-8'
+    #сохранение в json
+    with open("owner_info.json", "w", encoding="utf-8") as f:
+        json.dump(result, f, indent=2, ensure_ascii=False)
 
-soup = BeautifulSoup(response.text, "html.parser")
+    #сохранение в текстовом документе
+    with open("owner_info.txt", "w", encoding="utf-8") as f:
+        f.write(json.dumps(result, indent=2, ensure_ascii=False))
 
-#извлечение
-article = {
-    "title": soup.find("meta", property="og:title")["content"] if soup.find("meta", property="og:title") else "",
-    "views": soup.find("span", class_="tm-icon-counter__value").text.strip() if soup.find("span", class_="tm-icon-counter__value") else "",
-    "description": soup.find("meta", property="og:description")["content"] if soup.find("meta", property="og:description") else "",
-    "url": soup.find("meta", property="og:url")["content"] if soup.find("meta", property="og:url") else "",
-    "images": [img["content"] for img in soup.find_all("meta", property="og:image")]
-}
+    text.delete(1.0, tk.END)
+    text.insert(tk.END, json.dumps(result, indent=2, ensure_ascii=False))
 
-#сохранение в json
-with open("habr_article.json", "w", encoding="utf-8") as f:
-    json.dump(article, f, ensure_ascii=False, indent=4)
+root = tk.Tk()
+root.title("GitHub Owner Info")
+root.geometry("700x400")
 
-print("Основная информация сохранена в habr_article.json")
+tk.Button(root, text="Получить данные владельца Elasticsearch", command=get_owner_info).pack(pady=10)
+text = tk.Text(root, wrap=tk.WORD)
+text.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
+root.mainloop()
