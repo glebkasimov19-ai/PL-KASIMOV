@@ -68,4 +68,3 @@ for i in range(1, n + 1):
     sum = sum + faсtorial   
 
 print("Ответ:", sum)
->>>>>>> 7746009c935b48178ec4598c8139bbe224668879
